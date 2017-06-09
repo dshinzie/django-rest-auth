@@ -111,6 +111,13 @@ class SocialLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(_('Incorrect value'))
 
         if not login.is_existing:
+            if(allauth_settings.UNIQUE_EMAIL):
+                existing_account = get_user_model().objects.filter(
+                    email=login.user.email,
+                 ).count()
+                 if(existing_account != 0):
+                    raise serializers.ValidationError(
+                     _("A user is already registered with this e-mail address."))
             login.lookup()
             login.save(request, connect=True)
         attrs['user'] = login.account.user

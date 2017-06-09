@@ -111,11 +111,14 @@ class SocialLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(_('Incorrect value'))
 
         if not login.is_existing:
+            import pdb; pdb.set_trace()
             if(allauth_settings.UNIQUE_EMAIL):
+                pdb
                 existing_account = get_user_model().objects.filter(
                     email=login.user.email,
                  ).count()
                  if(existing_account != 0):
+                     import pdb; pdb.set_trace()
                     raise serializers.ValidationError(
                      _("A user is already registered with this e-mail address."))
             login.lookup()

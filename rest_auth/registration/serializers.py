@@ -110,15 +110,16 @@ class SocialLoginSerializer(serializers.Serializer):
         except HTTPError:
             raise serializers.ValidationError(_('Incorrect value'))
 
+        print(login.is_existing)
         if not login.is_existing:
-            import pdb; pdb.set_trace()
+            print(allauth_settingsself.UNIQUE_EMAIL)
             if(allauth_settings.UNIQUE_EMAIL):
-                pdb
+
                 existing_account = get_user_model().objects.filter(
                     email=login.user.email,
                  ).count()
+                 print(existing_account)
                  if(existing_account != 0):
-                     import pdb; pdb.set_trace()
                     raise serializers.ValidationError(
                      _("A user is already registered with this e-mail address."))
             login.lookup()

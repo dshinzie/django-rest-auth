@@ -106,22 +106,12 @@ class SocialLoginSerializer(serializers.Serializer):
 
         try:
             login = self.get_social_login(adapter, app, social_token, access_token)
+            import pdb; pdb.set_trace()
             complete_social_login(request, login)
         except HTTPError:
             raise serializers.ValidationError(_('Incorrect value'))
 
-        print(login.is_existing)
         if not login.is_existing:
-            print(allauth_settingsself.UNIQUE_EMAIL)
-            if(allauth_settings.UNIQUE_EMAIL):
-
-                existing_account = get_user_model().objects.filter(
-                    email=login.user.email,
-                 ).count()
-                 print(existing_account)
-                 if(existing_account != 0):
-                    raise serializers.ValidationError(
-                     _("A user is already registered with this e-mail address."))
             login.lookup()
             login.save(request, connect=True)
         attrs['user'] = login.account.user
